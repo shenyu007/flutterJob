@@ -1,7 +1,7 @@
 library screen_adaptation;
 
 import 'package:flutter/cupertino.dart';
-
+//判断是pad还是phone
 class Adapt {
   static double scale = 1;
   static double MAX_WIDTH = 800;
