@@ -1,0 +1,127 @@
+import 'package:c2hw_utils/size/screen_adaptation.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class ShowCommonDialog extends StatefulWidget {
+  // 内容区域布局
+  TextAlign contentAlign;
+
+  // 标题
+  String title;
+
+  //内容
+  String content;
+
+  // 点击返回index 0 1
+  Function onTap;
+
+  //按钮
+  List<String> items;
+
+  ShowCommonDialog({
+    this.contentAlign = TextAlign.left,
+    this.onTap,
+    this.items,
+    this.content,
+    this.title,
+  });
+
+  @override
+  _ShowAlertDialogState createState() => _ShowAlertDialogState();
+}
+
+class _ShowAlertDialogState extends State<ShowCommonDialog> {
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: Center(
+        // ClipRRect 创建圆角矩形 要不然发现下边button不是圆角
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(Adapt.getSize(25)),
+          child: Container(
+            color: Colors.white,
+            width: Adapt.getMax() * 2/3,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SizedBox(height: Adapt.getSize(50)),
+                (widget.title == null || widget.title.length == 0)
+                    ? Container()
+                    : Container(
+                        child: Text(
+                          widget.title,
+                          style: TextStyle(
+                              color: Color(0xFF222222),
+                              fontWeight: FontWeight.bold,
+                              fontSize: Adapt.getSize(35)),
+                        ),
+                      ),
+                const SizedBox(height: 10),
+                Container(
+                  margin: const EdgeInsets.only(left: 15, right: 15),
+                  child: Text(
+                    widget.content,
+                    style: TextStyle(
+                        color: Color(0xFF222222), fontSize: Adapt.getSize(30), height: 1.5),
+                  ),
+                ),
+                SizedBox(height: Adapt.getSize(50)),
+                _itemCreat(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _itemCreat() {
+    return Container(
+      padding: EdgeInsets.only(right: Adapt.getSize(48), bottom: Adapt.getSize(48)),
+      child: Row(
+        children: widget.items.map((res) {
+          int index = widget.items.indexOf(res);
+          return Expanded(
+            flex: 1,
+            child: GestureDetector(
+              onTap: () {
+                // FunctionUtil.pop(context);
+                if (widget.onTap != null) {
+                  widget.onTap(index);
+                }
+              },
+              child: Container(
+                height: Adapt.getSize(88),
+                margin: EdgeInsets.only(left: Adapt.getSize(48)),
+                alignment: Alignment.center,
+                child: Text(
+                  res,
+                  style: TextStyle(
+                      color: widget.items.length > 1 && index == 0
+                          ? Color(0xFF999999)
+                          : Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Adapt.getSize(32)),
+                ),
+                decoration: BoxDecoration(
+                  color: widget.items.length > 1 && index == 0
+                      ? Colors.white
+                      : Color(0xff2E96FF),
+                  border: Border.all(
+                    color: widget.items.length > 1 && index == 0
+                        ? Color(0xFF999999)
+                        : Color(0xff2E96FF),
+                    width: 1,
+                  ),
+                  borderRadius:
+                      BorderRadius.all(Radius.circular(Adapt.getSize(10))),
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
